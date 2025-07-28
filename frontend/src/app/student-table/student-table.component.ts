@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './student-table.component.html',
+  styleUrls: ['./student-table.component.css']
 })
 export class StudentTableComponent implements OnInit {
   students: any[] = [];

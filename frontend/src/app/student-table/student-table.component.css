@@ -8,14 +8,13 @@
 
 .styled-table {
   width: 100%;
-  color: #080000;
   border-collapse: collapse;
   margin-bottom: 20px;
 }
 
 .styled-table th,
 .styled-table td {
-  border: 1px solid #080000;
+  border: 1px solid #dddddd;
   padding: 10px;
   text-align: center;
 }

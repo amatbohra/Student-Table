@@ -2,7 +2,7 @@
 <div class="container">
   <h2>Student Records</h2>
 
-  <table class="styled-table">
+  <table class="styled-table" *ngIf="students.length > 0">
     <thead>
       <tr>
         <th>ID</th>
@@ -25,18 +25,19 @@
     </tbody>
   </table>
 
+  <div *ngIf="students.length === 0">No student records found.</div>
+
   <button (click)="showForm = true" *ngIf="!showForm">Add Student</button>
 
   <form *ngIf="showForm" (ngSubmit)="addStudent()">
-    <div class="form-group">
-      <input [(ngModel)]="formData.id" name="id" placeholder="ID" required />
-      <input [(ngModel)]="formData.name" name="name" placeholder="Name" required />
-      <input [(ngModel)]="formData.age" name="age" placeholder="Age" required />
-      <label>Fees Paid:
-        <input type="checkbox" [(ngModel)]="formData.feesPaid" name="feesPaid" />
-      </label>
-      <input [(ngModel)]="formData.address" name="address" placeholder="Address" required />
-    </div>
+    <input [(ngModel)]="formData.id" name="id" placeholder="ID" required />
+    <input [(ngModel)]="formData.name" name="name" placeholder="Name" required />
+    <input [(ngModel)]="formData.age" name="age" placeholder="Age" required />
+    <label>
+      Fees Paid:
+      <input type="checkbox" [(ngModel)]="formData.feesPaid" name="feesPaid" />
+    </label>
+    <input [(ngModel)]="formData.address" name="address" placeholder="Address" required />
     <button type="submit">Submit</button>
     <button type="button" (click)="showForm = false">Cancel</button>
   </form>
