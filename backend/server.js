@@ -50,25 +50,18 @@ app.get('/api/students', async (req, res) => {
 
 // ➕ ADD a student
 app.post('/api/students', async (req, res) => {
-  try {
-    const newStudent = new Student(req.body);
-    await newStudent.save();
-    res.status(201).send('Student added');
-  } catch (err) {
-    res.status(400).json({ error: 'Failed to add student' });
-  }
+  const newStudent = new Student(req.body);
+  const savedStudent = await newStudent.save();
+  res.status(201).json(savedStudent); // return new student
 });
+
 
 // ❌ DELETE a student
 app.delete('/api/students/:id', async (req, res) => {
-  try {
-    const deleted = await Student.findByIdAndDelete(req.params.id);
-    if (!deleted) return res.status(404).send('Student not found');
-    res.send('Student deleted');
-  } catch (err) {
-    res.status(400).json({ error: 'Failed to delete student' });
-  }
+  await Student.findByIdAndDelete(req.params.id); // uses MongoDB _id
+  res.send('Student deleted');
 });
+
 
 // 🚀 Start server
 app.listen(3000, () => {

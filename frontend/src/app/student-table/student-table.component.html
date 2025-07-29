@@ -1,44 +1,50 @@
 
-<div class="container">
-  <h2>Student Records</h2>
+<table border="1" style="width: 80%; margin: auto; text-align: center; border-collapse: collapse;">
+  <thead style="background-color: #f2f2f2;">
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Age</th>
+      <th>Fees Paid</th>
+      <th>Address</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let student of students">
+      <td>{{ student.id }}</td>
+      <td>{{ student.name }}</td>
+      <td>{{ student.age }}</td>
+      <td>{{ student.feesPaid ? 'Yes' : 'No' }}</td>
+      <td>{{ student.address }}</td>
 
-  <table class="styled-table" *ngIf="students.length > 0">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Age</th>
-        <th>Fees Paid</th>
-        <th>Address</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let student of students">
-        <td>{{ student.id }}</td>
-        <td>{{ student.name }}</td>
-        <td>{{ student.age }}</td>
-        <td>{{ student.feesPaid ? 'Yes' : 'No' }}</td>
-        <td>{{ student.address }}</td>
-        <td><button (click)="deleteStudent(student._id)">Delete</button></td>
-      </tr>
-    </tbody>
-  </table>
+      <td><button (click)="deleteStudent(student._id)">Delete</button>
+</td>
+    </tr>
+  </tbody>
+</table>
 
-  <div *ngIf="students.length === 0">No student records found.</div>
+<div style="text-align:center; margin: 20px;">
+  <button (click)="showForm = !showForm" style="margin-bottom: 20px;">
+    {{ showForm ? 'Close Form' : 'Add Student' }}
+  </button>
 
-  <button (click)="showForm = true" *ngIf="!showForm">Add Student</button>
+  <div *ngIf="message" style="color: green; font-weight: bold; margin-bottom: 10px;">
+    {{ message }}
+  </div>
 
-  <form *ngIf="showForm" (ngSubmit)="addStudent()">
-    <input [(ngModel)]="formData.id" name="id" placeholder="ID" required />
-    <input [(ngModel)]="formData.name" name="name" placeholder="Name" required />
-    <input [(ngModel)]="formData.age" name="age" placeholder="Age" required />
-    <label>
-      Fees Paid:
-      <input type="checkbox" [(ngModel)]="formData.feesPaid" name="feesPaid" />
-    </label>
-    <input [(ngModel)]="formData.address" name="address" placeholder="Address" required />
-    <button type="submit">Submit</button>
-    <button type="button" (click)="showForm = false">Cancel</button>
-  </form>
+  <div *ngIf="showForm" style="border: 1px solid #ccc; padding: 20px; border-radius: 10px; max-width: 400px; margin: auto;">
+    <form (ngSubmit)="addStudent()">
+      <input type="text" [(ngModel)]="formData.id" name="id" placeholder="ID" required /><br /><br />
+      <input type="text" [(ngModel)]="formData.name" name="name" placeholder="Name" required /><br /><br />
+      <input type="number" [(ngModel)]="formData.age" name="age" placeholder="Age (21–23)" required /><br /><br />
+      <label>
+        <input type="checkbox" [(ngModel)]="formData.feesPaid" name="feesPaid" />
+        Fees Paid
+      </label><br /><br />
+      <input type="text" [(ngModel)]="formData.address" name="address" placeholder="Address" required /><br /><br />
+      <button type="submit">Submit</button>
+    </form>
+  </div>
 </div>
+
