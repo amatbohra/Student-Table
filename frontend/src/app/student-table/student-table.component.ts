@@ -3,7 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ChangeDetectorRef } from '@angular/core';
+
+
 
 @Component({
   selector: 'app-student-table',
@@ -18,17 +19,18 @@ export class StudentTableComponent implements OnInit {
   showForm = false;
   message = '';
 
-  constructor(private http: HttpClient, private cd: ChangeDetectorRef) {}
+  constructor(private http: HttpClient) {}
 
   ngOnInit() {
     this.fetchStudents();
   }
 
   fetchStudents() {
-    this.http.get<any[]>('http://localhost:3000/api/students').subscribe(data => {
-      this.students = [...data];
-    });
-  }
+  this.http.get<any[]>('http://localhost:3000/api/students').subscribe(data => {
+    this.students = [...data]; // force re-render by cloning
+  });
+}
+
 
   addStudent() {
     const ageNum = Number(this.formData.age);
@@ -43,21 +45,31 @@ export class StudentTableComponent implements OnInit {
     }
 
     this.http.post<any>('http://localhost:3000/api/students', this.formData).subscribe((newStudent) => {
-      this.students.push(newStudent); // ✅ directly add to table
-      this.students = [...this.students]; // force view update
+      // ✅ Now this will contain MongoDB _id
+      this.students.push(newStudent);
+      this.students = [...this.students]; // refresh
       this.resetForm();
       this.showMessage("✅ Student added successfully");
+    }, err => {
+      this.showMessage("❌ Failed to add student");
     });
   }
 
-  deleteStudent(id: string) {
-  this.http.delete(`http://localhost:3000/api/students/${id}`).subscribe(() => {
-    this.fetchStudents();
-    this.cd.detectChanges(); // force Angular to detect UI change
-    this.showMessage("Student deleted successfully");
-  });
-}
 
+  deleteStudent(id: string) {
+    console.log("Attempting to delete student with ID:", id); // ✅ Debug
+
+    this.http.delete(`http://localhost:3000/api/students/${id}`).subscribe({
+      next: () => {
+        this.students = this.students.filter(student => student._id !== id);
+        this.showMessage("✅ Student deleted successfully");
+      },
+      error: (err) => {
+        console.error("❌ Delete error:", err);
+        this.showMessage("❌ Failed to delete student");
+      }
+    });
+  }
 
   resetForm() {
     this.formData = { id: '', name: '', age: null, feesPaid: false, address: '' };

@@ -18,7 +18,7 @@
       <td>{{ student.feesPaid ? 'Yes' : 'No' }}</td>
       <td>{{ student.address }}</td>
 
-      <td><button (click)="deleteStudent(student._id)">Delete</button>
+      <td><button (click) = "deleteStudent(student._id) ">Delete</button>
 </td>
     </tr>
   </tbody>
@@ -29,7 +29,7 @@
     {{ showForm ? 'Close Form' : 'Add Student' }}
   </button>
 
-  <div *ngIf="message" style="color: green; font-weight: bold; margin-bottom: 10px;">
+  <div *ngIf="message" class = "message" style="color: green; font-weight: bold; margin-bottom: 10px;">
     {{ message }}
   </div>
 
