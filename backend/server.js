@@ -29,11 +29,11 @@ Student.countDocuments().then(count => {
   if (count === 0) {
     console.log('🌱 Seeding data...');
     Student.insertMany([
-      { id: 'S1', name: 'Ali', age: '21', feesPaid: true, address: 'Mumbai' },
-      { id: 'S2', name: 'Zara', age: '22', feesPaid: false, address: 'Delhi' },
-      { id: 'S3', name: 'Rahul', age: '23', feesPaid: true, address: 'Bangalore' },
-      { id: 'S4', name: 'Sneha', age: '20', feesPaid: false, address: 'Hyderabad' },
-      { id: 'S5', name: 'Arjun', age: '24', feesPaid: true, address: 'Chennai' },
+      { id: '1', name: 'Ali', age: '21', feesPaid: true, address: 'Mumbai' },
+      { id: '2', name: 'Zara', age: '22', feesPaid: false, address: 'Delhi' },
+      { id: '3', name: 'Rahul', age: '23', feesPaid: true, address: 'Bangalore' },
+      { id: '4', name: 'Sneha', age: '20', feesPaid: false, address: 'Hyderabad' },
+      { id: '5', name: 'Arjun', age: '24', feesPaid: true, address: 'Chennai' },
     ]);
   }
 });
@@ -50,17 +50,28 @@ app.get('/api/students', async (req, res) => {
 
 // ➕ ADD a student
 app.post('/api/students', async (req, res) => {
-  const newStudent = new Student(req.body);
-  const savedStudent = await newStudent.save();
-  res.status(201).json(savedStudent); // return new student
+  const student = new Student(req.body);
+  const saved = await student.save();
+  res.json(saved); // return saved with _id
 });
+
 
 
 // ❌ DELETE a student
 app.delete('/api/students/:id', async (req, res) => {
-  await Student.findByIdAndDelete(req.params.id); // uses MongoDB _id
-  res.send('Student deleted');
+  try {
+    const result = await Student.findByIdAndDelete(req.params.id);
+    if (result) {
+      res.status(200).json({ message: "Student deleted" }); // ✅ Proper JSON response
+    } else {
+      res.status(404).json({ error: "Student not found" });
+    }
+  } catch (err) {
+    res.status(500).json({ error: "Delete failed", details: err });
+  }
 });
+
+
 
 
 // 🚀 Start server
